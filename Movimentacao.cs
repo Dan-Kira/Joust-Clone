@@ -1,7 +1,8 @@
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.UIElements;
-
+//****Este codigo so tem a movimentacao 
+//A partir da linha 36 temos a referencia do codigo de coleta de itens
 public class Movimentacao : MonoBehaviour
 {
     public float moveSpeed = 5f;      // Velocidade
@@ -31,7 +32,8 @@ public class Movimentacao : MonoBehaviour
     
     }
 
-
+//compara a tag coin e se o perosnagem encostar a moeda eh destroida 
+//E tambem tem o contador
     private void OnTriggerEnter2D(Collider2D other)
     {
         {
