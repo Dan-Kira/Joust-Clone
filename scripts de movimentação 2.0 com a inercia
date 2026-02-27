@@ -1,0 +1,64 @@
+using UnityEngine;
+
+public class Movimentacao : MonoBehaviour
+{
+    public float moveSpeed = 8f;         
+    public float acceleration = 20f;     
+    public float deceleration = 25f;     
+    public float jumpForce = 10f;        
+
+    private Rigidbody2D rb;
+    private float targetSpeed;
+    private float currentSpeed;
+
+    public CoinManager cm;
+
+    void Start()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    void Update()
+    {
+        float moveInput = Input.GetAxisRaw("Horizontal");
+
+        // Define velocidade alvo
+        targetSpeed = moveInput * moveSpeed;
+
+        // Se estiver apertando botão → acelera
+        if (moveInput != 0)
+        {
+            currentSpeed = Mathf.MoveTowards(
+                rb.linearVelocity.x,
+                targetSpeed,
+                acceleration * Time.deltaTime
+            );
+        }
+        // Se soltou botão → desacelera (derrapa)
+        else
+        {
+            currentSpeed = Mathf.MoveTowards(
+                rb.linearVelocity.x,
+                0,
+                deceleration * Time.deltaTime
+            );
+        }
+
+        rb.linearVelocity = new Vector2(currentSpeed, rb.linearVelocity.y);
+
+        // Pulo
+        if (Input.GetButtonDown("Jump"))
+        {
+            rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.CompareTag("Coin"))
+        {
+            Destroy(other.gameObject);
+            cm.coinCount++;
+        }
+    }
+}
